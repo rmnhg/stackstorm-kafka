@@ -63,8 +63,6 @@ class KafkaMessageSensor(Sensor):
                  message.offset, message.key, message.value)
             )
             topic = message.topic
-            if sys.version_info.major >= 3:
-                topic = topic.decode('utf-8')
             payload = {
                 'topic': topic,
                 'partition': message.partition,
