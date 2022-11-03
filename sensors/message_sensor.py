@@ -47,8 +47,7 @@ class KafkaMessageSensor(Sensor):
         self._consumer = KafkaConsumer(*self._topics,
                                        client_id=self._client_id,
                                        group_id=self._group_id,
-                                       bootstrap_servers=self._hosts,
-                                       deserializer_class=self._try_deserialize)
+                                       bootstrap_servers=self._hosts)
         self._ensure_topics_existence()
 
     def _ensure_topics_existence(self):
