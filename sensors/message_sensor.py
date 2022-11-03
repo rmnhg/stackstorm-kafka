@@ -94,7 +94,8 @@ class KafkaMessageSensor(Sensor):
         """
         Close connection, just to be sure.
         """
-        self._consumer._client.close()
+        print("It is supposed that the connection is closed.")
+        #self._consumer._client.close()
 
     def add_trigger(self, trigger):
         pass
