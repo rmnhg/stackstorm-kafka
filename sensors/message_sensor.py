@@ -68,7 +68,7 @@ class KafkaMessageSensor(Sensor):
                 'partition': message.partition,
                 'offset': message.offset,
                 'key': message.key,
-                'message': message.value,
+                'message': str(message.value),
             }
             self._sensor_service.dispatch(trigger=self.TRIGGER, payload=payload)
             # Mark this message as fully consumed
