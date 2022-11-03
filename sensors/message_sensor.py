@@ -63,7 +63,7 @@ class KafkaMessageSensor(Sensor):
                  message.offset, message.key, message.value)
             )
             topic = message.topic
-            print("El dir(message.value) tiene "+dir(message.value))
+            print("El dir(message.value) tiene "+str(dir(message.value)))
             payload = {
                 'topic': topic,
                 'partition': message.partition,
