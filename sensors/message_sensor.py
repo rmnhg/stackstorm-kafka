@@ -73,14 +73,14 @@ class KafkaMessageSensor(Sensor):
             self._sensor_service.dispatch(trigger=self.TRIGGER, payload=payload)
             # Mark this message as fully consumed
             #self._consumer.task_done(message)
-            #self._consumer.commit()
+            self._consumer.commit()
 
     def cleanup(self):
         """
         Close connection, just to be sure.
         """
         print("It is supposed that the connection is closed.")
-        #self._consumer._client.close()
+        self._consumer.close()
 
     def add_trigger(self, trigger):
         pass
