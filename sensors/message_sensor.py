@@ -57,21 +57,23 @@ class KafkaMessageSensor(Sensor):
         self._logger.debug('[KafkaMessageSensor]: Entering into listen mode ...')
 
         for message in self._consumer:
-            self._logger.debug(
-                "[KafkaMessageSensor]: Received %s:%d:%d: key=%s message=%s" %
-                (message.topic, message.partition,
-                 message.offset, message.key, message.value)
-            )
-            topic = message.topic
-            print("El dir(message.value) tiene "+str(dir(message.value)))
-            payload = {
-                'topic': topic,
-                'partition': message.partition,
-                'offset': message.offset,
-                'key': message.key,
-                'message': str(message.value.decode('utf-8')),
-            }
-            self._sensor_service.dispatch(trigger=self.TRIGGER, payload=payload)
+            # We discard messages that bounced back from our trigger
+            if self.TRIGGER not in message.value:
+                self._logger.debug(
+                    "[KafkaMessageSensor]: Received %s:%d:%d: key=%s message=%s" %
+                    (message.topic, message.partition,
+                    message.offset, message.key, message.value)
+                )
+                topic = message.topic
+                print("El dir(message.value) tiene "+str(dir(message.value)))
+                payload = {
+                    'topic': topic,
+                    'partition': message.partition,
+                    'offset': message.offset,
+                    'key': message.key,
+                    'message': str(message.value.decode('utf-8')),
+                }
+                self._sensor_service.dispatch(trigger=self.TRIGGER, payload=payload)
             # Mark this message as fully consumed
             #self._consumer.task_done(message)
             self._consumer.commit()
