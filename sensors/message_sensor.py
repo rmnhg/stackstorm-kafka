@@ -59,7 +59,7 @@ class KafkaMessageSensor(Sensor):
 
         for message in self._consumer:
             # We discard messages that bounced back from our trigger
-            if self.TRIGGER not in message.value:
+            if self.TRIGGER not in str(message.value):
                 self._logger.debug(
                     "[KafkaMessageSensor]: Received %s:%d:%d: key=%s message=%s" %
                     (message.topic, message.partition,
