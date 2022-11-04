@@ -59,7 +59,7 @@ class KafkaMessageSensor(Sensor):
 
         for message in self._consumer:
             # We discard messages that bounced back from our trigger
-            if self.TRIGGER not in str(message.value.decode('utf-8')):
+            if self.TRIGGER not in message.value:
                 self._logger.debug(
                     "[KafkaMessageSensor]: Received %s:%d:%d: key=%s message=%s" %
                     (message.topic, message.partition,
@@ -71,7 +71,7 @@ class KafkaMessageSensor(Sensor):
                     'partition': message.partition,
                     'offset': message.offset,
                     'key': message.key,
-                    'message': str(message.value.decode('utf-8')),
+                    'message': message.value,
                 }
                 self._sensor_service.dispatch(trigger=self.TRIGGER, payload=payload)
             # Mark this message as fully consumed
