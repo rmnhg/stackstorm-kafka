@@ -47,7 +47,8 @@ class KafkaMessageSensor(Sensor):
         self._consumer = KafkaConsumer(*self._topics,
                                        client_id=self._client_id,
                                        group_id=self._group_id,
-                                       bootstrap_servers=self._hosts)
+                                       bootstrap_servers=self._hosts,
+                                       value_deserializer=self._try_deserialize)
 
     def run(self):
         """
@@ -65,7 +66,6 @@ class KafkaMessageSensor(Sensor):
                     message.offset, message.key, message.value)
                 )
                 topic = message.topic
-                print("El dir(message.value) tiene "+str(dir(message.value)))
                 payload = {
                     'topic': topic,
                     'partition': message.partition,
@@ -82,7 +82,6 @@ class KafkaMessageSensor(Sensor):
         """
         Close connection, just to be sure.
         """
-        print("It is supposed that the connection is closed.")
         self._consumer.close()
 
     def add_trigger(self, trigger):
